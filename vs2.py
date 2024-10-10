@@ -21,6 +21,8 @@ login_data = {
 DATA0 = dict()
 DATA1 = list()
 DATA2 = list() # pas implemente
+MOYG = list()
+REALMOYG = list()
 
 ### Défintion des fonctions ###
 def load():
@@ -91,15 +93,25 @@ def getNotes(raw):
 	params : raw>str complique
 	return : notedata
 	"""
+	global MOYG
 	noteslist = raw.split('  - ')
 	notedata = list()
+	db = list()
 	pattern = r'(.+)\s\((.+)\)\s:\s(.+)'
 	for note in noteslist : 
 		match_ = re.match(pattern,note)
 		evaluation = match_.group(1).strip()
 		date = match_.group(2)
-		note = match_.group(3)
-		notedata.append([evaluation,date,note])
+		notecache = match_.group(3).replace(",",".")
+		cache1 = notecache.split("/")
+		cache2 = float(cache1[0])
+		cache3 = float(cache1[1])
+		cache4 = (cache2/cache3) * 20
+		db.append(cache4)
+		notedata.append([evaluation,date,notecache])
+	locmoyg = sum(db)/len(db)
+	MOYG.append(locmoyg)
+	notedata.append(["Moyenne","trimestre",str(locmoyg) + "/20"])
 	return notedata
 
 def getData1():
@@ -107,6 +119,8 @@ def getData1():
 	params : aucun
 	return : list > toutes les matieres, profs et notes
 	"""
+	global REALMOYG,MOYG
+	MOYG = list()
 	notespage = session.get(note_url)
 	rawhtml = notespage.text
 	rawdata = analyzeNotesHTML(rawhtml)
@@ -117,6 +131,7 @@ def getData1():
 		notes = elem['evaluation_note']
 		data = getNotes(notes)
 		finaldata.append([matproflist[0],matproflist[1],data])
+	REALMOYG = sum(MOYG)/len(MOYG)
 	return finaldata
 	
 def printNotes(data1):
@@ -124,14 +139,16 @@ def printNotes(data1):
 	params : data1
 	return : aucun
 	"""
+	global REALMOYG
 	print("###[NOTES]###")
 	for elem in data1 : 
-		print("# Matiere : ",elem[0])
-		print("#Professeur : ",elem[1])
-		print("#Notes : ")
+		print("Matiere : ",elem[0])
+		print("Professeur : ",elem[1])
+		print("Notes : ")
 		for note in elem[2] : 
-			print(f"{note[0]} le {note[1]} : {note[2]}")
-		print("_"*100)	
+			print(f"{note[0]} du {note[1]} : {note[2]}")
+		print("####################")
+	print(f"\033[1;31mMOYENNE GENERALE : {round(REALMOYG,2)}\033[0m")
 
 def getInfos() : 
 	raw = session.get(info_url).text	
