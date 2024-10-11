@@ -6,12 +6,14 @@ import requests
 from bs4 import BeautifulSoup
 import re
 import json
+from datetime import datetime, timedelta
 
 ### Défintion des constantes ###
 login_url = 'https://institutsaintpierresaintpaul28.la-vie-scolaire.fr/vsn.main/WSAuth/connexion'
 home_url = 'https://institutsaintpierresaintpaul28.la-vie-scolaire.fr/vsn.main/WSDashboard/afficherDashboard'
 note_url = 'https://institutsaintpierresaintpaul28.la-vie-scolaire.fr/vsn.main/releveNote/releveNotes'
 info_url = "https://institutsaintpierresaintpaul28.la-vie-scolaire.fr/vsn.main/WSMenu/infosPortailUser"
+homework_url = "https://ent05.la-vie-scolaire.fr/eliot-textes/vueCalendaire/eleve"
 ID = {'idEleve': 8736}
 login_data = {
     'login': 'mmautouchet', 
@@ -169,7 +171,27 @@ def printInfos(data0) :
 	print("Profil : ",data0["profil"])
 
 
+def getDay():
+    # Obtenir la date actuelle
+	aujourd_hui = datetime.today()
+    # Trouver le début de la semaine (lundi)
+	debut_semaine = aujourd_hui - timedelta(days=aujourd_hui.weekday())
+    # Trouver le lundi suivant
+	lundi_suivant = debut_semaine + timedelta(days=7)
+    # Retourner les dates au format 'AAAA-MM-JJ'
+	return [debut_semaine.strftime('%Y-%m-%d'), lundi_suivant.strftime('%Y-%m-%d')]
 
+def getHomeworks() :
+	"""Renvoie les devoirs a faire pour le jour de cours suivant dans DATA2
+	params : aucun
+	return : aucun	
+	"""
+	global DATA2
+	days = getDay()
+	print(days)
+	parameters = {'timeshift':-120,'from' : days[0], 'to' : days[1]}
+	homeworks = session.get(homework_url,params = parameters)
+	print(homeworks.text,homeworks)
 ### Programme principal ###
 
 # Ouverture de la session
@@ -209,7 +231,7 @@ while 1:
 	elif choix == "2" : 
 		printNotes(DATA1)
 	elif choix == "3" : 
-		raise NotImplementedError
+		getHomeworks()
 	elif choix == "4" : 
 		load()
 	else : 
