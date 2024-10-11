@@ -7,5 +7,5 @@ Client pour le service La Vie Scolaire
 - [ ] Accéder aux devoirs : https://ent05.la-vie-scolaire.fr/eliot-textes/vueCalendaire/index?dtJourOuvert=2024-10-11
 - [x] Rétablir les moyennes générales
 - [ ] Fusionner le client avec le "hack"
-- [ ] Interface graphique
+- [ ] Interface graphique (nicegui)
 
