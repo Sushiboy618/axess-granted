@@ -8,4 +8,4 @@ Client pour le service La Vie Scolaire
 - [x] Rétablir les moyennes générales
 - [ ] Fusionner le client avec le "hack"
 - [ ] Interface graphique (nicegui)
-
+#Abandonné pour raisons légales 
