@@ -16,8 +16,8 @@ info_url = "https://institutsaintpierresaintpaul28.la-vie-scolaire.fr/vsn.main/W
 homework_url = "https://ent05.la-vie-scolaire.fr/eliot-textes/vueCalendaire/eleve"
 ID = {'idEleve': 8736}
 login_data = {
-    'login': 'mmautouchet', 
-    'password': 'L0uise1110#', 
+    'login': 'toor', 
+    'password': 'root', 
     'externalentpersjointure': None 
 }
 DATA0 = dict()
